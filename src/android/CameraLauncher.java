@@ -939,7 +939,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
     private Bitmap getScaledAndRotatedBitmap(String imageUrl, String fileUrl) throws IOException {
         Bitmap bitmap = getScaledAndRotatedBitmap(imageUrl);
         if (null == bitmap && null != fileUrl) {
-            getScaledAndRotatedBitmap(fileUrl);
+            bitmap = getScaledAndRotatedBitmap(fileUrl);
         }
         return bitmap;
     }
