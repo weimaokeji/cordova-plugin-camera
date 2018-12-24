@@ -139,6 +139,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
         //This allows us to not make this a breaking change to embedding
         this.applicationId = (String) BuildHelper.getBuildConfigValue(cordova.getActivity(), "APPLICATION_ID");
         this.applicationId = preferences.getString("applicationId", this.applicationId);
+        this.applicationId = cordova.getActivity().getPackageName();
 
 
         if (action.equals("takePicture")) {
@@ -711,7 +712,7 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                 }
                 Bitmap bitmap = null;
                 try {
-                    bitmap = getScaledAndRotatedBitmap(uriString);
+                    bitmap = getScaledAndRotatedBitmap(uriString, fileLocation);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -926,6 +927,21 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
             }
         }
         return uri;
+    }
+
+    /**
+     * Return a scaled and rotated bitmap based on the target width and height
+     * @param imageUrl master url
+     * @param fileUrl slaver url
+     * @return
+     * @throws IOException
+     */
+    private Bitmap getScaledAndRotatedBitmap(String imageUrl, String fileUrl) throws IOException {
+        Bitmap bitmap = getScaledAndRotatedBitmap(imageUrl);
+        if (null == bitmap && null != fileUrl) {
+            getScaledAndRotatedBitmap(fileUrl);
+        }
+        return bitmap;
     }
 
     /**
